@@ -1,0 +1,16 @@
+[2025-09-13 18:35:58] Starting task: reading files
+[2025-09-13 18:35:59] Files read: monthly=(36, 8), forecast=(13, 14), health=(36, 2)
+[2025-09-13 18:35:59] Time columns: monthly=日期, forecast=日期, health=date
+[2025-09-13 18:35:59] Target columns: monthly=营业收入, forecast=营业收入
+[2025-09-13 18:35:59] Training data shape after cleaning: (36, 2)
+[2025-09-13 18:36:00] Feature data shape after lag features: (24, 10)
+[2025-09-13 18:36:00] Features: ['month', 'year', 'lag_1', 'lag_2', 'lag_3', 'lag_6', 'lag_12', 'rolling_3']
+[2025-09-13 18:36:00] CV fold: train=(8, 8), val=(4, 8), MAE=840.7601473773766
+[2025-09-13 18:36:00] CV fold: train=(12, 8), val=(4, 8), MAE=4745.754195492328
+[2025-09-13 18:36:01] CV fold: train=(16, 8), val=(4, 8), MAE=4654.405887371117
+[2025-09-13 18:36:01] CV fold: train=(20, 8), val=(4, 8), MAE=4722.270302001689
+[2025-09-13 18:36:01] Best model selected, MAE=840.7601473773766
+[2025-09-13 18:36:01] Forecast completed: 6 months predicted
+[2025-09-13 18:36:01] KPI extracted: {'debt_ratio': None, 'current_ratio': None, 'quick_ratio': None, 'health_score': 1.73809}
+[2025-09-13 18:36:01] SHAP importance calculated: [{'name': 'lag_1', 'importance': 180.39006615462043}, {'name': 'lag_3', 'importance': 147.40577554646484}, {'name': 'lag_2', 'importance': 128.95654866778065}, {'name': 'month', 'importance': 121.08889472322447}, {'name': 'rolling_3', 'importance': 98.23054753477284}, {'name': 'lag_6', 'importance': 71.84071287792123}, {'name': 'lag_12', 'importance': 11.890197700323169}, {'name': 'year', 'importance': 0.0}]
+[2025-09-13 18:36:01] Task completed successfully

@@ -1,0 +1,25 @@
+# 日志配置文件，用于控制日志的输出格式和级别
+version: 1
+disable_existing_loggers: False
+formatters:
+  default:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  brief:
+    format: '%(levelname)s - %(message)s'
+
+handlers:
+  file:
+    class: logging.FileHandler
+    level: INFO
+    formatter: default
+    filename: ./logs/system.log
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: brief
+
+loggers:
+  root:
+    level: INFO
+    handlers: [file, console]

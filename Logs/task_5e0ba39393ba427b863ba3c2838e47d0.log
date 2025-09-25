@@ -1,0 +1,18 @@
+[2025-09-13 21:56:47] 任务开始：读取文件，CmdStanPy 版本=1.2.4
+[2025-09-13 21:56:47] 文件读取完成：monthly=(36, 8), forecast=(13, 14), health=(36, 2)
+[2025-09-13 21:56:47] 时间列：monthly=日期, forecast=日期, health=date
+[2025-09-13 21:56:47] 目标列：monthly=营业收入, forecast=营业收入
+[2025-09-13 21:56:47] 训练数据清洗后形状: (36, 2)
+[2025-09-13 21:56:47] 目标列方差: 49164275.49743283
+[2025-09-13 21:56:47] 自适应滞后特征: [1, 2, 3, 6, 12], max_lag=12, n_rows=36
+[2025-09-13 21:56:47] 特征数据形状（含滞后和傅里叶项）: (24, 20), 特征: ['date', 'target', 'month', 'year', 'lag_1', 'lag_2', 'lag_3', 'lag_6', 'lag_12', 'rolling_3', 'total_assets', 'net_profit', 'fourier_sin_1', 'fourier_cos_1', 'fourier_sin_2', 'fourier_cos_2', 'fourier_sin_3', 'fourier_cos_3', 'fourier_sin_4', 'fourier_cos_4']
+[2025-09-13 21:56:47] 最终 X 形状: (24, 18), y 形状: (24,)
+[2025-09-13 21:57:06] Prophet 训练成功，伪 MAE=0.04881648250072127
+[2025-09-13 21:57:06] LinearFallback 训练完成，伪 MAE=5967.939917331804
+[2025-09-13 21:57:06] 任务失败: 'LinearRegression' object has no attribute 'make_future_dataframe'
+Traceback (most recent call last):
+  File "E:\Project1\project_folder\app.py", line 326, in run_task
+    future = best_model.make_future_dataframe(periods=12, freq='M')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'LinearRegression' object has no attribute 'make_future_dataframe'
+

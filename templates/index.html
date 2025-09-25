@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}智能经营分析系统 - 上传文件{% endblock %}
+
+{% block pages %}
+<!-- 页面1: 上传页面 -->
+<div id="page1" class="page active">
+    <div class="page-content">
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <h1 data-i18n="appName">智能经营分析系统</h1>
+            <p data-i18n="systemDescription">上传您的财务数据文件，系统将为您生成专业的预测分析报告</p>
+            <p data-i18n="supportedFormats">支持 .xls, .xlsx, .csv 格式的文件</p>
+        </div>
+
+        <!-- 上传区域 -->
+        <div class="upload-container">
+            <div class="upload-box">
+                <input id="fileInput" type="file" accept=".xls,.xlsx,.csv" class="upload-input">
+                <div class="upload-btn" title="点击上传文件"></div>
+                <div class="file-info-container">
+                    <div class="upload-placeholder" data-i18n="uploadPlaceholder">请上传.xls/.xlsx/.csv文件</div>
+                    <div id="fileInfo" style="display: none;"></div>
+                    <div id="fileName" style="display: none; font-weight: 600; color: #3498db;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 上传状态区域 -->
+        <div id="fileStatus" class="file-status">
+            <div class="results-container">
+                <h3 data-i18n="fileUploadSuccess">文件上传成功！</h3>
+                <p><span data-i18n="selectedFile">已选择文件</span>: <span id="displayFileName"></span></p>
+                <button id="startAnalysisBtn" class="export-btn" data-i18n="startAnalysis">开始财务分析</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页面2: 预测结果页面 (由JavaScript动态生成) -->
+<div id="page2" class="page">
+    <div class="page-content">
+        <!-- 内容将由JavaScript动态生成 -->
+    </div>
+</div>
+
+<!-- 页面3: 健康度分析页面 (由JavaScript动态生成) -->
+<div id="page3" class="page">
+    <div class="page-content">
+        <!-- 内容将由JavaScript动态生成 -->
+    </div>
+</div>
+
+<!-- 页面4: 仪表盘页面 (由JavaScript动态生成) -->
+<div id="page4" class="page">
+    <div class="page-content">
+        <!-- 内容将由JavaScript动态生成 -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 确保语言文件已加载
+    if (typeof translations === 'undefined') {
+        console.error('语言文件未加载');
+    }
+</script>
+{% endblock %}
+
+
+

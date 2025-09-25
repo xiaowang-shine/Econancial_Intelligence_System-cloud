@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}智能经营分析系统 - 仪表盘{% endblock %}
+
+{% block content %}
+<!-- 顶部导航栏 -->
+<div class="navbar">
+    <button id="homeBtn" class="home-btn">首页</button>
+    <button id="settingsBtn" class="settings-btn"><img src="{{ url_for('static', filename='img/settings-icon.png') }}" alt="设置"></button>
+</div>
+
+<!-- 页面主内容区域 -->
+<div class="container">
+    <p>以下是根据您的数据生成的财务预测结果。</p>
+
+    <!-- 财务预测表格 -->
+    <div class="results-container" id="resultsContainer">
+        <h3>未来12个月预测结果</h3>
+        <table id="forecastTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>预测值</th>
+                    <th>下限</th>
+                    <th>上限</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result['forecast'][:10] %}
+                    <tr>
+                        <td>{{ item['date'] }}</td>
+                        <td>{{ item['value'] }}</td>
+                        <td>{{ item['lower'] }}</td>
+                        <td>{{ item['upper'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- KPI仪表盘 -->
+    <div class="results-container" id="kpiContainer">
+        <h3>关键绩效指标 (KPI)</h3>
+        <canvas id="kpiChart"></canvas>
+    </div>
+
+    <!-- 特征重要性图表 -->
+    <div class="results-container" id="importanceContainer">
+        <h3>特征重要性</h3>
+        <canvas id="importanceChart"></canvas>
+    </div>
+
+    <!-- 动画效果 -->
+    <div id="contentArea" class="main-content">
+        <p>您的数据已经成功加载，我们的系统正在为您生成结果。</p>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dashboard 数据和图表
+    const result = {{ result | tojson }};
+
+    // 初始化 KPI 图表
+    const kpiData = {
+        labels: ['负债占比', '资产占比'],
+        datasets: [{
+            data: [result.kpi.debt_ratio || 0, 100 - (result.kpi.debt_ratio || 0)],
+            backgroundColor: ['#EF5350', '#4CAF50'],
+        }]
+    };
+
+    const kpiConfig = {
+        type: 'pie',
+        data: kpiData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: `资产负债率 (${result.kpi.debt_ratio || 0}%)`
+                }
+            }
+        }
+    };
+
+    // 创建 KPI 饼图
+    new Chart(document.getElementById('kpiChart'), kpiConfig);
+
+    // 初始化 特征重要性图表
+    const importanceData = {
+        labels: result.explain.feature_importance.map(item => item.name),
+        datasets: [{
+            label: '特征重要性',
+            data: result.explain.feature_importance.map(item => item.importance),
+            backgroundColor: '#1E88E5',
+        }]
+    };
+
+    const importanceConfig = {
+        type: 'bar',
+        data: importanceData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Top 5 特征重要性'
+                }
+            }
+        }
+    };
+
+    // 创建 特征重要性 条形图
+    new Chart(document.getElementById('importanceChart'), importanceConfig);
+
+    // 显示预测结果
+    document.getElementById('resultsContainer').classList.add('fade-in-up');
+    document.getElementById('kpiContainer').classList.add('fade-in-up');
+    document.getElementById('importanceContainer').classList.add('fade-in-up');
+</script>
+{% endblock %}
+{% endblock %}

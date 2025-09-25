@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: 智能经营分析系统 API
+  description: 该 API 用于处理财务预测与健康度评估。
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: 本地开发服务器
+
+paths:
+  /upload_preview:
+    post:
+      summary: 上传并预览文件
+      description: 上传三个 Excel 文件（Forecast, Health, Monthly）并预览字段映射。
+      operationId: uploadPreview
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileForecast:
+                  type: string
+                  format: binary
+                fileHealth:
+                  type: string
+                  format: binary
+                fileMonthly:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 文件上传成功，并返回预览信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  columns:
+                    type: object
+                  preview:
+                    type: object
+                  token:
+                    type: string
+                    example: "abc123"
+        '400':
+          description: 上传失败，文件格式错误
+
+  /start_task:
+    post:
+      summary: 启动预测任务
+      description: 提交文件并开始财务预测任务。
+      operationId: startTask
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileForecast:
+                  type: string
+                  format: binary
+                fileHealth:
+                  type: string
+                  format: binary
+                fileMonthly:
+                  type: string
+                  format: binary
+                mapping:
+                  type: string
+                  example: '{"fileMonthly": {"timeCol": "date", "targetCol": "revenue"}}'
+      responses:
+        '200':
+          description: 任务启动成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  task_id:
+                    type: string
+                    example: "dummy_task_id"
+        '400':
+          description: 文件上传或参数错误
+
+  /task_status:
+    get:
+      summary: 查询任务状态
+      description: 根据任务 ID 查询任务状态。
+      operationId: taskStatus
+      parameters:
+        - name: task_id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "dummy_task_id"
+      responses:
+        '200':
+          description: 返回任务状态
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "running"
+                  progress:
+                    type: integer
+                    example: 50
+                  error:
+                    type: string
+                    example: "文件解析失败"
+        '404':
+          description: 任务未找到
+
+  /get_result:
+    get:
+      summary: 获取预测结果
+      description: 获取财务预测结果。
+      operationId: getResult
+      parameters:
+        - name: task_id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "dummy_task_id"
+      responses:
+        '200':
+          description: 返回预测结果
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  result:
+                    type: object
+                    example: { "forecast": [...] }
+        '404':
+          description: 任务未找到
+
+  /export_report:
+    get:
+      summary: 导出财务报告
+      description: 导出财务预测报告（PDF）。
+      operationId: exportReport
+      parameters:
+        - name: task_id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "dummy_task_id"
+      responses:
+        '200':
+          description: 导出成功，返回报告文件
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: 导出失败

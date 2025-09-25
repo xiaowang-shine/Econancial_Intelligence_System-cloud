@@ -1,0 +1,21 @@
+[2025-09-13 19:39:33] Starting task: reading files
+[2025-09-13 19:39:33] Files read: monthly=(36, 8), forecast=(13, 14), health=(36, 2)
+[2025-09-13 19:39:33] Time columns: monthly=日期, forecast=日期, health=date
+[2025-09-13 19:39:33] Target columns: monthly=营业收入, forecast=营业收入
+[2025-09-13 19:39:33] Training data shape after cleaning: (36, 2)
+[2025-09-13 19:39:33] Target variance: 49164275.49743283
+[2025-09-13 19:39:33] Adaptive lags: [1, 2, 3, 6, 12], max_lag=12, n_rows=36
+[2025-09-13 19:39:33] Feature data shape after lag features: (24, 10), features: ['date', 'target', 'month', 'year', 'lag_1', 'lag_2', 'lag_3', 'lag_6', 'lag_12', 'rolling_3']
+[2025-09-13 19:39:33] Final X shape: (24, 8), y shape: (24,)
+[2025-09-13 19:39:33] CV fold: train=(6, 8), val=(6, 8), MAE=1045.1275530888731
+[2025-09-13 19:39:33] CV fold: train=(12, 8), val=(6, 8), MAE=6337.555779652807
+[2025-09-13 19:39:33] CV fold: train=(18, 8), val=(6, 8), MAE=6354.078073042543
+[2025-09-13 19:39:33] RF Best model selected, MAE=1045.1275530888731
+[2025-09-13 19:39:33] Forecast completed: 6 months, model_type=RF
+[2025-09-13 19:39:33] Health score from health: 1.74
+[2025-09-13 19:39:33] Debt ratio calculated from monthly: 18247.05/51174.3 = 35.66%
+[2025-09-13 19:39:33] Current ratio from monthly: 39000.03/18247.05 = 2.14
+[2025-09-13 19:39:33] Quick ratio from monthly: (39000.03-8106.74)/18247.05 = 1.69
+[2025-09-13 19:39:33] KPI extracted: {'debt_ratio': 35.66, 'current_ratio': 2.14, 'quick_ratio': 1.69, 'health_score': 1.74}
+[2025-09-13 19:39:33] SHAP importance calculated: [{'name': 'lag_1', 'importance': 141.15723127914572}, {'name': 'lag_3', 'importance': 129.62314469762896}, {'name': 'month', 'importance': 122.40711386446429}, {'name': 'lag_2', 'importance': 106.92739936956617}, {'name': 'rolling_3', 'importance': 71.38646657679692}, {'name': 'lag_6', 'importance': 17.025414183655922}, {'name': 'lag_12', 'importance': 15.0233377732549}, {'name': 'year', 'importance': 0.0}]
+[2025-09-13 19:39:33] Task completed successfully

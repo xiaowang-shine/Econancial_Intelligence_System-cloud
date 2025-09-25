@@ -1,0 +1,8 @@
+# 默认保持与原版输出一致的配置（normalize_weights/adjust_profit 关闭）
+seed: 42
+output_dir: ./outputs
+normalize_weights: false
+adjust_profit: false
+interest_rate: 0.05
+add_noise: true
+noise_scale: 0.01
