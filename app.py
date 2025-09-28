@@ -27,8 +27,13 @@ else:
 # ------------------ 应用初始化 ------------------
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-# 初始化系统组件 - 使用 CoreAlgorithm 替代 system_mod
-core_algorithm = CoreAlgorithm(desktop_path="E:/Project1/project_folder/Download")
+# 初始化系统组件 - 使用环境变量或默认目录配置下载目录
+# DOWNLOAD_DIR 环境变量优先；否则默认使用项目根目录下的 Download 目录
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DOWNLOAD_DIR = os.getenv('DOWNLOAD_DIR', os.path.join(BASE_DIR, 'Download'))
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+core_algorithm = CoreAlgorithm(desktop_path=DOWNLOAD_DIR)
 task_manager = TaskManager(log_dir=LOG_DIR)
 
 # 确保目录存在

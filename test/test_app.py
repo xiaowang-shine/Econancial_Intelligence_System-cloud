@@ -1,63 +1,117 @@
-import os
-import pytest
 import json
-from app import app
+import threading
+from pathlib import Path
+import sys
 
-# 测试上传功能
+import pytest
+
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from app import app, task_manager
+
+TEST_DIR = Path(__file__).parent
+MONTHLY_FILE = TEST_DIR / "test_files" / "test_monthly.xlsx"
+
+
+@pytest.fixture(autouse=True)
+def clean_task_manager():
+    task_manager.tasks.clear()
+    yield
+    task_manager.tasks.clear()
+
+
 @pytest.fixture
-def client():
+def client(tmp_path, monkeypatch):
     app.config['TESTING'] = True
-    app.config['UPLOAD_FOLDER'] = './uploads'
-    with app.test_client() as client:
-        yield client
+    # 使用临时目录存储上传文件，避免污染真实目录
+    app.config['UPLOAD_FOLDER'] = tmp_path
+    monkeypatch.setenv('DOWNLOAD_DIR', str(tmp_path / "downloads"))
+    with app.test_client() as test_client:
+        yield test_client
 
-# 测试上传文件
-def test_upload(client):
-    # 测试文件上传
-    with open('test_files/test_forecast.xlsx', 'rb') as f1, \
-         open('test_files/test_health.xlsx', 'rb') as f2, \
-         open('test_files/test_monthly.xlsx', 'rb') as f3:
-        data = {
-            'fileForecast': (f1, 'test_forecast.xlsx'),
-            'fileHealth': (f2, 'test_health.xlsx'),
-            'fileMonthly': (f3, 'test_monthly.xlsx')
-        }
-        response = client.post('/upload_preview', data=data, follow_redirects=True)
-        assert response.status_code == 200
-        json_data = json.loads(response.data)
-        assert json_data['status'] == 'ok'
 
-# 测试预测任务启动
-def test_start_task(client):
-    with open('test_files/test_forecast.xlsx', 'rb') as f1, \
-         open('test_files/test_health.xlsx', 'rb') as f2, \
-         open('test_files/test_monthly.xlsx', 'rb') as f3:
-        data = {
-            'fileForecast': (f1, 'test_forecast.xlsx'),
-            'fileHealth': (f2, 'test_health.xlsx'),
-            'fileMonthly': (f3, 'test_monthly.xlsx')
-        }
-        response = client.post('/start_task', data=data, follow_redirects=True)
-        assert response.status_code == 200
-        json_data = json.loads(response.data)
-        assert json_data['status'] == 'ok'
-        task_id = json_data['task_id']
-        assert task_id is not None
+@pytest.fixture
+def stub_training(monkeypatch):
+    fake_result = {
+        'forecast': [{
+            'date': '2025-01-31',
+            'value': 123.0,
+            'lower': 110.0,
+            'upper': 135.0
+        }],
+        'kpi': {'debt_ratio': 40},
+        'explain': {'feature_importance': []},
+        'suggestions': [],
+        'meta': {'model': 'TestModel', 'fluctuation': 0.0}
+    }
 
-# 测试任务状态查询
-def test_task_status(client):
-    # 假设任务 ID 为 'dummy_task_id'
-    task_id = 'dummy_task_id'
-    response = client.get(f'/task_status?task_id={task_id}')
+    def fake_run_training_task(monthly_df, health_df, mapping):
+        return fake_result
+
+    monkeypatch.setattr('model.routes.run_training_task', fake_run_training_task)
+    return fake_result
+
+
+@pytest.fixture
+def immediate_thread(monkeypatch):
+    class ImmediateThread:
+        def __init__(self, target, args=(), kwargs=None, daemon=True):
+            self._target = target
+            self._args = args
+            self._kwargs = kwargs or {}
+
+        def start(self):
+            self._target(*self._args, **self._kwargs)
+
+    monkeypatch.setattr(threading, 'Thread', lambda target, args=(), kwargs=None, daemon=True: ImmediateThread(target, args, kwargs, daemon))
+
+
+def test_upload_preview_only_monthly(client):
+    with MONTHLY_FILE.open('rb') as monthly:
+        # Flask test_client 使用 data 参数上传文件，格式为 (file_object, filename, content_type)
+        data = {'fileMonthly': (monthly, MONTHLY_FILE.name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')}
+        response = client.post('/upload_preview', data=data, content_type='multipart/form-data')
+
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Response: {response.get_data(as_text=True)}"
+    payload = response.get_json()
+    assert payload['status'] == 'ok'
+    assert 'token' in payload
+    assert 'columns' in payload and 'fileMonthly' in payload['columns']
+    assert 'preview' in payload and 'fileMonthly' in payload['preview']
+
+
+def test_task_flow(client, stub_training, immediate_thread):
+    with MONTHLY_FILE.open('rb') as monthly:
+        # Flask test_client 使用 data 参数上传文件，格式为 (file_object, filename, content_type)
+        data = {'fileMonthly': (monthly, MONTHLY_FILE.name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')}
+        response = client.post('/start_task', data=data, content_type='multipart/form-data')
+
     assert response.status_code == 200
-    json_data = json.loads(response.data)
-    assert json_data['status'] in ['running', 'finished', 'failed']
+    payload = response.get_json()
+    assert payload['status'] == 'ok'
+    task_id = payload['task_id']
+    assert task_id
 
-# 测试获取预测结果
-def test_get_result(client):
-    task_id = 'dummy_task_id'
-    response = client.get(f'/get_result?task_id={task_id}')
-    assert response.status_code == 200
-    json_data = json.loads(response.data)
-    assert 'result' in json_data
-    assert json_data['status'] == 'ok'
+    # 查询任务状态
+    status_resp = client.get(f'/task_status?task_id={task_id}')
+    assert status_resp.status_code == 200
+    status_payload = status_resp.get_json()
+    assert status_payload['status'] == 'finished'
+    assert status_payload['progress'] == 100
+
+    # 获取任务结果
+    result_resp = client.get(f'/get_result?task_id={task_id}')
+    assert result_resp.status_code == 200
+    result_payload = result_resp.get_json()
+    assert result_payload['status'] == 'ok'
+    assert result_payload['result'] == stub_training
+    assert 'dashboard_url' in result_payload
+
+
+if __name__ == "__main__":
+    import pytest as _pytest
+
+    raise SystemExit(_pytest.main([__file__]))

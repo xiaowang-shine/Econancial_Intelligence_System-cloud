@@ -281,19 +281,21 @@ def calculate_feature_importance(model: Any, X: pd.DataFrame) -> List[Dict[str, 
     return importances
 
 
-def run_training_task(monthly_df: pd.DataFrame, health_df: pd.DataFrame,
-                      mapping: Dict[str, Any]) -> Dict[str, Any]:
+def run_training_task(monthly_df: pd.DataFrame, health_df: Optional[pd.DataFrame] = None,
+                      mapping: Dict[str, Any] = None) -> Dict[str, Any]:
     """
     运行训练任务 - 作为核心算法的辅助
 
     Args:
         monthly_df: 月度数据DataFrame
-        health_df: 健康度数据DataFrame
+        health_df: 健康度数据DataFrame（可选，因为健康度是输出而非输入）
         mapping: 列映射字典
 
     Returns:
         训练结果字典
     """
+    if mapping is None:
+        mapping = {}
     try:
         # 推断时间列和目标列
         time_col = mapping.get('fileMonthly', {}).get('timeCol') or infer_time_col(monthly_df)

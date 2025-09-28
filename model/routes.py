@@ -85,16 +85,15 @@ def register_routes(app, system, task_manager):
     @app.route('/upload_preview', methods=['POST'])
     def upload_preview():
         try:
-            files = {}
-            for key in ['fileForecast', 'fileHealth', 'fileMonthly']:
-                if key not in request.files:
-                    return jsonify(status='error', error=f'{key} 未上传'), 400
+            # 只处理月度数据文件
+            if 'fileMonthly' not in request.files:
+                return jsonify(status='error', error='fileMonthly 未上传'), 400
 
-                file = request.files[key]
-                if file.filename == '':
-                    return jsonify(status='error', error=f'{key} 没有选择文件'), 400
+            file = request.files['fileMonthly']
+            if file.filename == '':
+                return jsonify(status='error', error='fileMonthly 没有选择文件'), 400
 
-                files[key] = save_uploaded_file(file)
+            files = {'fileMonthly': save_uploaded_file(file)}
 
             columns, preview = {}, {}
             for k, p in files.items():
@@ -117,11 +116,15 @@ def register_routes(app, system, task_manager):
     @app.route('/start_task', methods=['POST'])
     def start_task():
         try:
-            files = {}
-            for key in ['fileForecast', 'fileHealth', 'fileMonthly']:
-                if key not in request.files:
-                    return jsonify(status='error', error=f'{key} 未上传'), 400
-                files[key] = save_uploaded_file(request.files[key])
+            # 只处理月度数据文件
+            if 'fileMonthly' not in request.files:
+                return jsonify(status='error', error='fileMonthly 未上传'), 400
+            
+            file = request.files['fileMonthly']
+            if file.filename == '':
+                return jsonify(status='error', error='fileMonthly 没有选择文件'), 400
+            
+            files = {'fileMonthly': save_uploaded_file(file)}
 
             mapping_raw = request.form.get('mapping')
             mapping = json.loads(mapping_raw) if mapping_raw else {}
@@ -134,19 +137,17 @@ def register_routes(app, system, task_manager):
             # 启动任务线程
             def run_task_wrapper():
                 try:
-                    # 读取文件
+                    # 只读取月度数据文件
                     monthly = read_excel_file(files['fileMonthly'])
-                    forecast = read_excel_file(files['fileForecast'])
-                    health = read_excel_file(files['fileHealth'])
 
-                    if monthly is None or forecast is None or health is None:
-                        raise Exception("读取文件失败")
+                    if monthly is None:
+                        raise Exception("读取月度数据文件失败")
 
                     task_manager.log_message(task_id,
-                                             f"文件读取完成：monthly={monthly.shape}, forecast={forecast.shape}, health={health.shape}")
+                                             f"文件读取完成：monthly={monthly.shape}")
 
-                    # 运行训练任务
-                    result = run_training_task(monthly, health, mapping)
+                    # 运行训练任务（健康度数据为None，因为它是输出而非输入）
+                    result = run_training_task(monthly, None, mapping)
 
                     # 更新任务状态为完成
                     task_manager.update_task_status(
