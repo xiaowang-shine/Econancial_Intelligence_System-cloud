@@ -179,6 +179,21 @@ def generate_financial_report(result: Dict[str, Any], task_id: str) -> BytesIO:
             story.append(Paragraph(suggestion_text, chinese_style))
             story.append(Spacer(1, 8))
 
+        # 经营风险与亮点
+        if 'insights' in result and result['insights']:
+            insights = result['insights']
+            story.append(Paragraph("经营风险与亮点", heading_style))
+            if insights.get('warnings'):
+                story.append(Paragraph("<b>风险提示：</b>", chinese_style))
+                for warn in insights['warnings']:
+                    story.append(Paragraph(f"- {warn}", chinese_style))
+                story.append(Spacer(1, 6))
+            if insights.get('highlights'):
+                story.append(Paragraph("<b>优势亮点：</b>", chinese_style))
+                for highlight in insights['highlights']:
+                    story.append(Paragraph(f"- {highlight}", chinese_style))
+                story.append(Spacer(1, 12))
+
         # 风险提示
         story.append(Paragraph("风险提示", heading_style))
         risk_text = """
@@ -578,6 +593,20 @@ def export_data_to_excel(result, task_id):
                 except Exception as e:
                     print(f"导出KPI指标失败: {e}")
 
+            # 经营洞察
+            if 'insights' in result and result['insights']:
+                try:
+                    insight_rows = []
+                    for warning in result['insights'].get('warnings', []):
+                        insight_rows.append({'类型': '风险', '内容': warning})
+                    for highlight in result['insights'].get('highlights', []):
+                        insight_rows.append({'类型': '亮点', '内容': highlight})
+                    if insight_rows:
+                        df_insights = pd.DataFrame(insight_rows)
+                        df_insights.to_excel(writer, sheet_name='风险与亮点', index=False)
+                except Exception as e:
+                    print(f"导出经营洞察失败: {e}")
+
         output.seek(0)
         return output
 
@@ -668,6 +697,20 @@ def export_data_to_csv(result, task_id):
                 ]
                 for row in summary_data:
                     writer.writerow(row)
+
+        if 'insights' in result and result['insights']:
+            insights = result['insights']
+            if insights.get('warnings') or insights.get('highlights'):
+                writer.writerow([])
+                writer.writerow(['=== Strategic Insights ==='])
+                if insights.get('warnings'):
+                    writer.writerow(['Risks'])
+                    for warning in insights['warnings']:
+                        writer.writerow(['', warning])
+                if insights.get('highlights'):
+                    writer.writerow(['Highlights'])
+                    for highlight in insights['highlights']:
+                        writer.writerow(['', highlight])
 
         # 获取CSV内容并编码为UTF-8字节
         csv_content = output.getvalue()

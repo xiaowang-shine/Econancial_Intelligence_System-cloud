@@ -442,11 +442,15 @@ def register_routes(app, system, task_manager):
             # 生成健康度对比结果
             health_comparison = generate_health_comparison(financial_forecast)
 
+            # 生成经营亮点与风险提示
+            anomaly_report = generate_anomaly_report(financial_forecast)
+
             # 生成任务ID
             task_id = uuid.uuid4().hex
             task_manager.update_task_status(task_id, status='finished', result={
                 'financial_forecast': financial_forecast,
-                'health_comparison': health_comparison
+                'health_comparison': health_comparison,
+                'insights': anomaly_report
             })
 
             return jsonify({
@@ -454,7 +458,8 @@ def register_routes(app, system, task_manager):
                 'task_id': task_id,
                 'results': {
                     'financial_forecast': financial_forecast,
-                    'health_comparison': health_comparison
+                    'health_comparison': health_comparison,
+                    'insights': anomaly_report
                 }
             })
 
@@ -465,7 +470,7 @@ def register_routes(app, system, task_manager):
     def calculate_financial_ratios(forecast_data):
         """修复健康度评分计算"""
         results = {'year': datetime.now().year + 1, 'data': []}
-
+        previous_row = None
         for i, (date_index, row) in enumerate(forecast_data.iterrows()):
             try:
                 # 日期处理
@@ -483,12 +488,28 @@ def register_routes(app, system, task_manager):
                 NI = float(row.get('净利润', 0)) or 2742
                 Rev = float(row.get('营业收入', 0)) or 41206
 
+                # 计算股东权益（若缺失则兜底）
+                Equity = max(TA - TD, 1.0)
+
                 # 计算比率（添加合理性检查）
                 CR = min(CA / max(CL, 1), 10)  # 流动比率
                 QR = min((CA - Inv) / max(CL, 1), 10)  # 速动比率
                 DR = min(TD / max(TA, 1), 1)  # 资产负债率
                 NPM = max(min(NI / max(Rev, 1), 1), -1)  # 净利润率
                 AT = min(Rev / max(TA, 1), 5)  # 资产周转率
+                ROE = max(min(NI / Equity, 1), -1)  # 股东权益回报率
+                ROA = max(min(NI / max(TA, 1), 1), -1)  # 资产回报率
+
+                # 同比/月度增长率（与上一期比较）
+                revenue_growth = None
+                profit_growth = None
+                if previous_row:
+                    prev_rev = previous_row.get('Rev', Rev)
+                    prev_ni = previous_row.get('NI', NI)
+                    if prev_rev not in (0, None):
+                        revenue_growth = (Rev - prev_rev) / prev_rev
+                    if prev_ni not in (0, None):
+                        profit_growth = (NI - prev_ni) / prev_ni
 
                 # 健康度评分（使用你的权重公式）
                 health_score = (
@@ -507,10 +528,16 @@ def register_routes(app, system, task_manager):
                     'CA': CA, 'CL': CL, 'Inv': Inv, 'TD': TD,
                     'TA': TA, 'NI': NI, 'Rev': Rev,
                     'CR': CR, 'QR': QR, 'DR': DR, 'NPM': NPM, 'AT': AT,
-                    'health_score': health_score
+                    'health_score': health_score,
+                    'Equity': Equity,
+                    'ROE': ROE,
+                    'ROA': ROA,
+                    'revenue_growth': revenue_growth,
+                    'profit_growth': profit_growth
                 }
 
                 results['data'].append(result_item)
+                previous_row = result_item
 
             except Exception as e:
                 print(f"计算第{i}行时出错: {e}")
@@ -539,6 +566,53 @@ def register_routes(app, system, task_manager):
             })
 
         return comparison
+
+    def generate_anomaly_report(financial_forecast):
+        """
+        基于预测结果生成经营亮点与风险提示
+        """
+        warnings = []
+        highlights = []
+
+        data = financial_forecast.get('data', [])
+        if not data:
+            return {'warnings': warnings, 'highlights': highlights}
+
+        for item in data:
+            date = item['date']
+
+            # 健康度低预警
+            if item['health_score'] < 0.45:
+                warnings.append(f"{date} 健康度得分较低（{item['health_score']:.2f}），需关注现金流与盈利质量。")
+
+            # 负债率偏高
+            if item['DR'] > 0.65:
+                warnings.append(f"{date} 资产负债率 {item['DR']:.2%}，杠杆水平偏高，建议控制负债。")
+
+            # 速动比率偏低
+            if item['QR'] < 1.0:
+                warnings.append(f"{date} 速动比率 {item['QR']:.2f}，短期偿债能力偏弱，应关注流动资金安排。")
+
+            # 收入/利润增长异常
+            rev_growth = item.get('revenue_growth')
+            if rev_growth is not None:
+                if rev_growth > 0.15:
+                    highlights.append(f"{date} 营业收入预计增长 {rev_growth:.2%}，可考虑加大市场投入巩固增长势头。")
+                elif rev_growth < -0.1:
+                    warnings.append(f"{date} 营业收入预计下降 {rev_growth:.2%}，需排查订单或客户流失情况。")
+
+            profit_growth = item.get('profit_growth')
+            if profit_growth is not None:
+                if profit_growth > 0.15:
+                    highlights.append(f"{date} 净利润预计提升 {profit_growth:.2%}，建议分析盈利驱动因素并复制成功经验。")
+                elif profit_growth < -0.1:
+                    warnings.append(f"{date} 净利润预计下滑 {profit_growth:.2%}，需关注成本控制及毛利结构。")
+
+            # ROE亮点
+            if item['ROE'] > 0.15:
+                highlights.append(f"{date} ROE 预计达到 {item['ROE']:.2%}，资本回报表现优秀。")
+
+        return {'warnings': warnings, 'highlights': highlights}
 
     # 将方法添加到task_manager实例
     task_manager.get_current_time = get_current_time.__get__(task_manager, TaskManager)

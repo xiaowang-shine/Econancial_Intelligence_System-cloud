@@ -598,6 +598,8 @@ function loadPageContent(pageIndex) {
             setTimeout(() => {
                 renderForecastChart();
                 renderForecastTable();
+                renderMetricCards();
+                renderInsights();
             }, 100);
             break;
         case 2: // 健康度分析页面
@@ -611,6 +613,7 @@ function loadPageContent(pageIndex) {
             pageContent.innerHTML = createDashboardHTML();
             setTimeout(() => {
                 renderKPIChart();
+                renderGrowthChart();
             }, 100);
             break;
     }
@@ -624,6 +627,7 @@ function createForecastResultsHTML() {
     return `
         <div class="results-container">
             <h2 data-i18n="financialForecast">财务预测结果</h2>
+            <div class="metrics-grid" id="metricCards"></div>
             <div class="chart-container">
                 <canvas id="forecastChart"></canvas>
             </div>
@@ -639,11 +643,15 @@ function createForecastResultsHTML() {
                             <th data-i18n="totalRevenue">总收入</th>
                             <th data-i18n="netProfit">净利润</th>
                             <th data-i18n="healthScore">健康度评分</th>
+                            <th>ROE</th>
+                            <th data-i18n="revenueGrowth">收入增速</th>
+                            <th data-i18n="profitGrowth">利润增速</th>
                         </tr>
                     </thead>
                     <tbody id="forecastTableBody"></tbody>
                 </table>
             </div>
+            <div class="insights-container" id="insightsContainer"></div>
             <div class="export-buttons">
                 <button class="export-btn" onclick="exportData('xlsx')" data-i18n="exportExcel">导出Excel</button>
                 <button class="export-btn" onclick="exportData('csv')" data-i18n="exportCSV">导出CSV</button>
@@ -685,6 +693,9 @@ function createDashboardHTML() {
             <h2 data-i18n="dashboard">KPI仪表盘</h2>
             <div class="chart-container">
                 <canvas id="kpiChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
             </div>
         </div>
     `;
@@ -775,7 +786,7 @@ function renderForecastTable() {
     const forecastData = currentResults.financial_forecast?.data || currentResults.results?.financial_forecast?.data || [];
 
     if (forecastData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">暂无数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" class="text-center">暂无数据</td></tr>';
         return;
     }
 
@@ -796,6 +807,9 @@ function renderForecastTable() {
                     </div>
                 </div>
             </td>
+            <td>${formatPercent(item.ROE)}</td>
+            <td>${formatPercent(item.revenue_growth)}</td>
+            <td>${formatPercent(item.profit_growth)}</td>
         </tr>
     `).join('');
 }
@@ -897,27 +911,107 @@ function renderKPIChart() {
     const ctx = document.getElementById('kpiChart');
     if (!ctx || !currentResults) return;
 
-    // 简单的KPI图表实现
+    const forecastData = currentResults.financial_forecast?.data || currentResults.results?.financial_forecast?.data || [];
+    if (forecastData.length === 0) return;
+
+    const latest = forecastData[forecastData.length - 1];
+
     new Chart(ctx.getContext('2d'), {
-        type: 'bar',
+        type: 'radar',
         data: {
-            labels: ['健康度评分', '营业收入', '净利润', '流动比率', '速动比率'],
+            labels: ['健康度', 'ROE', 'ROA', '流动比率', '速动比率', '负债安全'],
             datasets: [{
-                label: '关键指标',
-                data: [0.85, 100000, 20000, 2.13, 1.64], // 示例数据
-                backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c']
+                label: latest.date,
+                data: [
+                    latest.health_score || 0,
+                    normalizeRatio(latest.ROE || 0, 0.25),
+                    normalizeRatio(latest.ROA || 0, 0.15),
+                    normalizeRatio(latest.CR || 0, 3),
+                    normalizeRatio(latest.QR || 0, 3),
+                    1 - (latest.DR || 0)
+                ],
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                pointBackgroundColor: '#2980b9'
             }]
         },
         options: {
             responsive: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        showLabelBackdrop: false,
+                        stepSize: 0.2
+                    }
+                }
+            },
             plugins: {
+                legend: { display: false },
                 title: {
                     display: true,
-                    text: '关键绩效指标'
+                    text: '最新关键绩效雷达图'
                 }
             }
         }
     });
+}
+
+function renderGrowthChart() {
+    const ctx = document.getElementById('growthChart');
+    if (!ctx || !currentResults) return;
+
+    const forecastData = currentResults.financial_forecast?.data || currentResults.results?.financial_forecast?.data || [];
+    if (forecastData.length === 0) return;
+
+    const labels = forecastData.map(item => item.date);
+    const revenueGrowth = forecastData.map(item => (item.revenue_growth || 0) * 100);
+    const profitGrowth = forecastData.map(item => (item.profit_growth || 0) * 100);
+
+    new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: '营业收入增速',
+                    data: revenueGrowth,
+                    backgroundColor: 'rgba(46, 204, 113, 0.7)'
+                },
+                {
+                    label: '净利润增速',
+                    data: profitGrowth,
+                    backgroundColor: 'rgba(231, 76, 60, 0.7)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    ticks: {
+                        callback: (value) => `${value}%`
+                    },
+                    title: {
+                        display: true,
+                        text: '增速 (%)'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: '营收与利润增速趋势'
+                }
+            }
+        }
+    });
+}
+
+function normalizeRatio(value, benchmark) {
+    if (benchmark === 0) return 0;
+    return Math.max(0, Math.min(value / benchmark, 1));
 }
 
 // 数字格式化函数
@@ -932,6 +1026,93 @@ function formatNumber(num) {
     } else {
         return num.toFixed(2);
     }
+}
+
+function formatPercent(value) {
+    if (value === undefined || value === null || isNaN(value)) return '—';
+    return `${(value * 100).toFixed(1)}%`;
+}
+
+function renderMetricCards() {
+    const container = document.getElementById('metricCards');
+    if (!container || !currentResults) return;
+
+    const forecastData = currentResults.financial_forecast?.data || currentResults.results?.financial_forecast?.data || [];
+    if (forecastData.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'grid';
+
+    const avgHealth = average(forecastData.map(item => item.health_score || 0));
+    const avgROE = average(forecastData.map(item => item.ROE || 0));
+    const avgRevenueGrowth = average(forecastData.map(item => item.revenue_growth || 0));
+    const peakRevenue = Math.max(...forecastData.map(item => item.Rev || 0));
+
+    container.innerHTML = `
+        <div class="metric-card primary">
+            <div class="metric-label">平均健康度</div>
+            <div class="metric-value">${(avgHealth * 100).toFixed(1)}%</div>
+            <div class="metric-subtext">整体经营稳定性</div>
+        </div>
+        <div class="metric-card success">
+            <div class="metric-label">平均ROE</div>
+            <div class="metric-value">${(avgROE * 100).toFixed(1)}%</div>
+            <div class="metric-subtext">资本回报效率</div>
+        </div>
+        <div class="metric-card warning">
+            <div class="metric-label">平均收入增速</div>
+            <div class="metric-value">${(avgRevenueGrowth * 100).toFixed(1)}%</div>
+            <div class="metric-subtext">营收增长动能</div>
+        </div>
+        <div class="metric-card neutral">
+            <div class="metric-label">预测峰值营收</div>
+            <div class="metric-value">${formatNumber(peakRevenue)}</div>
+            <div class="metric-subtext">预计最高月度收入</div>
+        </div>
+    `;
+}
+
+function renderInsights() {
+    const container = document.getElementById('insightsContainer');
+    if (!container || !currentResults) return;
+
+    const insights = currentResults.insights || currentResults.results?.insights;
+    if (!insights) {
+        container.style.display = 'none';
+        return;
+    }
+
+    const hasWarnings = insights.warnings && insights.warnings.length > 0;
+    const hasHighlights = insights.highlights && insights.highlights.length > 0;
+
+    if (!hasWarnings && !hasHighlights) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'grid';
+    container.innerHTML = `
+        <div class="insight-card risk">
+            <h3>风险提示</h3>
+            <ul>
+                ${hasWarnings ? insights.warnings.map(text => `<li>${text}</li>`).join('') : '<li>暂无风险警报</li>'}
+            </ul>
+        </div>
+        <div class="insight-card highlight">
+            <h3>增长亮点</h3>
+            <ul>
+                ${hasHighlights ? insights.highlights.map(text => `<li>${text}</li>`).join('') : '<li>暂无亮点信息</li>'}
+            </ul>
+        </div>
+    `;
+}
+
+function average(arr) {
+    const valid = arr.filter(value => value !== undefined && value !== null && !isNaN(value));
+    if (!valid.length) return 0;
+    return valid.reduce((sum, value) => sum + value, 0) / valid.length;
 }
 
 // 分析函数
@@ -1237,6 +1418,72 @@ style.textContent = `
     .page-content::-webkit-scrollbar-thumb {
         background: rgba(0,0,0,0.3);
         border-radius: 10px;
+    }
+    
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .metric-card {
+        padding: 16px;
+        border-radius: 16px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+    
+    .metric-card.primary { background: linear-gradient(135deg, #4e73df, #1c48b6); }
+    .metric-card.success { background: linear-gradient(135deg, #1cc88a, #0f9d68); }
+    .metric-card.warning { background: linear-gradient(135deg, #f6c23e, #e3a008); }
+    .metric-card.neutral { background: linear-gradient(135deg, #6c757d, #495057); }
+    
+    .metric-label { font-size: 14px; opacity: 0.85; }
+    .metric-value { font-size: 28px; font-weight: 600; }
+    .metric-subtext { font-size: 12px; opacity: 0.75; }
+    
+    .insights-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin: 24px 0;
+    }
+    
+    .insight-card {
+        padding: 20px;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+        border-left: 6px solid transparent;
+    }
+    
+    .insight-card h3 {
+        margin-bottom: 12px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    .insight-card ul {
+        padding-left: 18px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 14px;
+    }
+    
+    .insight-card.risk {
+        border-left-color: #e74c3c;
+        background: linear-gradient(145deg, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
+    }
+    
+    .insight-card.highlight {
+        border-left-color: #1cc88a;
+        background: linear-gradient(145deg, rgba(28, 200, 138, 0.1), rgba(28, 200, 138, 0.05));
     }
 `;
 document.head.appendChild(style);
