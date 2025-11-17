@@ -3,7 +3,7 @@ import json
 import uuid
 
 import numpy as np
-from flask import request, jsonify, send_file, render_template, url_for
+from flask import request, jsonify, send_file, render_template, url_for, redirect, session
 from werkzeug.routing import BuildError
 from datetime import date, datetime
 import os
@@ -16,6 +16,12 @@ from .model_training import run_training_task, infer_time_col, infer_target_col
 from .report_generator import generate_financial_report, generate_dashboard_chart_data, export_data_to_excel, \
     export_data_to_csv
 from .core_algorithm import CoreAlgorithm
+from .auth import auth_manager, login_required, admin_required, user_required
+from .error_handler import (
+    handle_error, validate_request_data, log_performance,
+    BusinessError, ValidationError, AuthenticationError, 
+    AuthorizationError, NotFoundError, FileProcessingError
+)
 
 MAX_FILE_COUNT = 3  # 最大上传文件数量
 core_algo = CoreAlgorithm()  # 创建实例
@@ -49,17 +55,65 @@ def register_routes(app, system, task_manager):
         task_manager: TaskManager实例
     """
 
+    # 初始化认证管理器
+    auth_manager.init_app(app)
+
     # 上下文处理器
     @app.context_processor
     def context_processor():
         return inject_safe_and_branding()
 
+    # ------------------ 认证路由 ------------------
+    @app.route('/login', methods=['GET', 'POST'])
+    def login():
+        if request.method == 'GET':
+            return render_template('login.html')
+        
+        # POST 请求处理
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({'success': False, 'error': '请求数据为空'}), 400
+                
+            username = data.get('username')
+            password = data.get('password')
+            
+            if not username or not password:
+                return jsonify({'success': False, 'error': '用户名和密码不能为空'}), 400
+            
+            user = auth_manager.authenticate(username, password)
+            if user:
+                return jsonify({'success': True, 'user': user.to_dict()})
+            else:
+                return jsonify({'success': False, 'error': '用户名或密码错误'}), 401
+                
+        except Exception as e:
+            return jsonify({'success': False, 'error': f'登录失败: {str(e)}'}), 500
+
+    @app.route('/logout', methods=['POST'])
+    @login_required
+    def logout():
+        auth_manager.logout_user()
+        return jsonify({'success': True})
+
+    @app.route('/api/current_user')
+    @login_required
+    def get_current_user():
+        user = auth_manager.get_current_user()
+        return jsonify({'user': user.to_dict() if user else None})
+
     # ------------------ 页面路由 ------------------
     @app.route('/')
     def index():
+        # 检查用户是否已登录
+        user = auth_manager.get_current_user()
+        if not user:
+            # 未登录则重定向到登录页面，添加消息参数
+            return redirect(url_for('login', next=request.url))
         return render_template('index.html')
 
     @app.route('/dashboard')
+    @login_required
     def dashboard():
         job_id = request.args.get('job_id')
         task_id = request.args.get('task_id')
@@ -83,37 +137,48 @@ def register_routes(app, system, task_manager):
 
     # ------------------ API路由 ------------------
     @app.route('/upload_preview', methods=['POST'])
+    @user_required
+    @handle_error
+    @log_performance
     def upload_preview():
+        # 验证文件上传
+        if 'fileMonthly' not in request.files:
+            raise ValidationError('fileMonthly 未上传')
+
+        file = request.files['fileMonthly']
+        if file.filename == '':
+            raise ValidationError('fileMonthly 没有选择文件')
+
         try:
-            # 只处理月度数据文件
-            if 'fileMonthly' not in request.files:
-                return jsonify(status='error', error='fileMonthly 未上传'), 400
-
-            file = request.files['fileMonthly']
-            if file.filename == '':
-                return jsonify(status='error', error='fileMonthly 没有选择文件'), 400
-
             files = {'fileMonthly': save_uploaded_file(file)}
+        except Exception as e:
+            raise FileProcessingError(f'文件保存失败: {str(e)}', file.filename)
 
-            columns, preview = {}, {}
-            for k, p in files.items():
+        columns, preview = {}, {}
+        for k, p in files.items():
+            try:
                 df = read_excel_file(p)
+                if df is None or df.empty:
+                    raise FileProcessingError('文件为空或格式不正确', file.filename)
+                
                 columns[k] = list(df.columns.astype(str))
                 preview[k] = df.head(5).fillna('').to_dict(orient='records')
+                
+            except Exception as e:
+                raise FileProcessingError(f'文件读取失败: {str(e)}', file.filename)
 
-            token = uuid.uuid4().hex
+        token = uuid.uuid4().hex
 
-            # 存储预览信息
-            task_manager.update_task_status(
-                token,
-                result={'preview_files': files, 'created_at': task_manager.get_current_time()}
-            )
+        # 存储预览信息
+        task_manager.update_task_status(
+            token,
+            result={'preview_files': files, 'created_at': task_manager.get_current_time()}
+        )
 
-            return jsonify(status='ok', columns=columns, preview=preview, token=token)
-        except Exception as e:
-            return jsonify(status='error', error=str(e)), 500
+        return jsonify(status='ok', columns=columns, preview=preview, token=token)
 
     @app.route('/start_task', methods=['POST'])
+    @user_required
     def start_task():
         try:
             # 只处理月度数据文件
@@ -134,38 +199,33 @@ def register_routes(app, system, task_manager):
             # 初始化任务状态
             task_manager.update_task_status(task_id, status='running', progress=0)
 
-            # 启动任务线程
-            def run_task_wrapper():
+            # 使用异步文件处理器
+            from .async_file_processor import file_processor
+            
+            def process_financial_data(file_path, mapping_data):
+                """处理财务数据"""
                 try:
-                    # 只读取月度数据文件
-                    monthly = read_excel_file(files['fileMonthly'])
-
+                    # 读取月度数据文件
+                    monthly = read_excel_file(file_path)
                     if monthly is None:
                         raise Exception("读取月度数据文件失败")
-
-                    task_manager.log_message(task_id,
-                                             f"文件读取完成：monthly={monthly.shape}")
-
-                    # 运行训练任务（健康度数据为None，因为它是输出而非输入）
-                    result = run_training_task(monthly, None, mapping)
-
-                    # 更新任务状态为完成
-                    task_manager.update_task_status(
-                        task_id,
-                        status='finished',
-                        progress=100,
-                        result=result
-                    )
-
+                    
+                    task_manager.log_message(task_id, f"文件读取完成：monthly={monthly.shape}")
+                    
+                    # 运行训练任务
+                    result = run_training_task(monthly, None, mapping_data)
+                    return result
+                    
                 except Exception as e:
-                    error_msg = f"任务执行失败: {str(e)}"
-                    task_manager.log_message(task_id, error_msg)
-                    task_manager.update_task_status(task_id, status='failed', error=error_msg)
+                    raise Exception(f"数据处理失败: {str(e)}")
 
-            # 启动任务线程
-            import threading
-            th = threading.Thread(target=run_task_wrapper, daemon=True)
-            th.start()
+            # 提交异步任务
+            file_processor.process_file_async(
+                task_id, 
+                files['fileMonthly'], 
+                process_financial_data,
+                mapping=mapping
+            )
 
             return jsonify(status='ok', task_id=task_id)
         except Exception as e:
@@ -176,10 +236,31 @@ def register_routes(app, system, task_manager):
         return "Not Found", 404
 
     @app.route('/task_status')
+    @user_required
     def task_status():
         task_id = request.args.get('task_id')
         if not task_id:
             return jsonify(status='error', error='task_id 参数缺失'), 400
+
+        # 首先检查异步处理器中的任务状态
+        from .async_file_processor import file_processor
+        async_status = file_processor.get_task_status(task_id)
+        
+        if async_status['status'] != 'not_found':
+            # 如果异步处理器中有任务，更新任务管理器状态
+            if async_status['status'] == 'completed':
+                task_manager.update_task_status(
+                    task_id,
+                    status='finished',
+                    progress=100,
+                    result=async_status.get('result')
+                )
+            elif async_status['status'] == 'failed':
+                task_manager.update_task_status(
+                    task_id,
+                    status='failed',
+                    error=async_status.get('error', '未知错误')
+                )
 
         # 获取任务状态
         info = task_manager.get_task_status(task_id)

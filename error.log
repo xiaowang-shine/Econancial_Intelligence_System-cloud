@@ -1,0 +1,212 @@
+2025-11-17 08:31:15,275 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.207.134.193:5000
+2025-11-17 08:31:15,275 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 08:31:15,360 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 08:31:24,516 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 08:31:24,532 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 08:31:30,378 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 08:31:30] "[31m[1mGET / HTTP/1.1[0m" 401 -
+2025-11-17 08:31:49,239 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 08:31:49] "[31m[1mGET / HTTP/1.1[0m" 401 -
+2025-11-17 18:50:28,986 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 18:50:28,986 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 18:50:29,186 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 18:50:38,341 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 18:50:38,353 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:03:32,069 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:03:32,071 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:03:32,131 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:03:52,831 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:03:52,849 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:03:52,896 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:03:52] "[31m[1mGET / HTTP/1.1[0m" 401 -
+2025-11-17 19:03:52,899 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:03:52] "[31m[1mGET / HTTP/1.1[0m" 401 -
+2025-11-17 19:03:52,902 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:03:52] "[31m[1mGET / HTTP/1.1[0m" 401 -
+2025-11-17 19:13:59,538 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:13:59,539 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:13:59,540 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:14:01,163 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:14:39,663 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:14:39,663 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:14:39,686 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:14:48,505 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:14:48,524 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:20:52,121 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:20:54,270 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:20:54,311 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:21:10,003 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:21:10,047 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:21:32,106 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:32] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:21:32,111 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:32] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:21:34,500 - werkzeug - INFO -  * Detected change in 'E:\\python\\Anaconda3-2024.06-1\\Lib\\site-packages\\flask\\debughelpers.py', reloading
+2025-11-17 19:21:34,522 - model.error_handler - WARNING - ÒµÎñ´íÎó: È±ÉÙ±ØÐè×Ö¶Î: username, password, ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:21:34,610 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:34] "[31m[1mGET /login HTTP/1.1[0m" 400 -
+2025-11-17 19:21:35,716 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:21:50,092 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:21:50,114 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:21:50,162 - model.error_handler - WARNING - ÒµÎñ´íÎó: È±ÉÙ±ØÐè×Ö¶Î: username, password, ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:21:50,162 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:50] "[31m[1mGET /login HTTP/1.1[0m" 400 -
+2025-11-17 19:21:50,163 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:50] "GET /favicon.ico HTTP/1.1" 200 -
+2025-11-17 19:21:50,742 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:21:50] "GET /favicon.ico HTTP/1.1" 200 -
+2025-11-17 19:23:22,861 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:23:22,863 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:23:24,927 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:24:15,294 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:24:15,296 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:24:15,343 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:24:24,612 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:24:24,635 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:29:33,205 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:29:33,205 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:29:33,236 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:29:45,525 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:29:45,528 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:29:45,587 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:45] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:29:45,590 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:45] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:29:45,642 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:45] "GET /login HTTP/1.1" 200 -
+2025-11-17 19:29:45,647 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:45] "GET /login HTTP/1.1" 200 -
+2025-11-17 19:29:46,410 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+2025-11-17 19:29:46,419 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,431 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/img/logo.svg HTTP/1.1" 200 -
+2025-11-17 19:29:46,437 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/js/bootstrap.bundle.min.js HTTP/1.1" 200 -
+2025-11-17 19:29:46,439 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/img/logo.svg HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,448 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/js/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,487 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/img/settings-icon.png HTTP/1.1" 200 -
+2025-11-17 19:29:46,487 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-11-17 19:29:46,495 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/img/settings-icon.png HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,500 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,504 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-11-17 19:29:46,512 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,769 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/js/jquery-3.5.1.min.js HTTP/1.1" 200 -
+2025-11-17 19:29:46,774 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/js/jquery-3.5.1.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:29:46,821 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "GET /static/js/languages.js HTTP/1.1" 200 -
+2025-11-17 19:29:46,828 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:29:46] "[36mGET /static/js/languages.js HTTP/1.1[0m" 304 -
+2025-11-17 19:30:12,271 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:12,307 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:12] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:21,996 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:21,996 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:21] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:22,576 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:22,576 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:22] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:22,810 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:22,810 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:22] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:23,246 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:23,246 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:23] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:23,638 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:23,640 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:23] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:23,929 - model.error_handler - WARNING - ÒµÎñ´íÎó: ÇëÇóÊý¾ÝÑéÖ¤Ê§°Ü: register_routes.<locals>.login.<locals>.handle_login() got an unexpected keyword argument 'validated_data', ´íÎó´úÂë: VALIDATION_ERROR
+2025-11-17 19:30:23,929 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:23] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+2025-11-17 19:30:25,931 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-11-17 19:30:25,937 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:25] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+2025-11-17 19:30:26,292 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:26] "GET /static/js/bootstrap.bundle.min.js.map HTTP/1.1" 200 -
+2025-11-17 19:30:26,419 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:30:26] "GET /static/css/bootstrap.min.css.map HTTP/1.1" 200 -
+2025-11-17 19:31:00,697 - werkzeug - INFO -  * Detected change in 'E:\\python\\Anaconda3-2024.06-1\\Scripts\\conda-script.py', reloading
+2025-11-17 19:31:02,244 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:31:11,846 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:31:11,865 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:31:53,914 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\app.py', reloading
+2025-11-17 19:31:53,920 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:31:55,669 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:32:07,867 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:32:07,884 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:33:07,252 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:33:07,254 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:33:09,655 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:33:27,122 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:33:27,140 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:34:24,634 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:34:24,635 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\routes.py', reloading
+2025-11-17 19:34:25,871 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:35:16,516 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:35:16,516 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:35:16,538 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:35:25,573 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:35:25,605 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:37:27,646 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:37:27,646 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:37:27,684 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:37:37,654 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:37:37,672 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:37:37,805 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:37] "POST /login HTTP/1.1" 200 -
+2025-11-17 19:37:37,856 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:37] "GET / HTTP/1.1" 200 -
+2025-11-17 19:37:38,754 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/img/logo.svg HTTP/1.1[0m" 304 -
+2025-11-17 19:37:38,760 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/js/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:37:38,767 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-11-17 19:37:38,951 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+2025-11-17 19:37:38,970 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-11-17 19:37:38,985 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:38] "[36mGET /static/js/languages.js HTTP/1.1[0m" 304 -
+2025-11-17 19:37:39,009 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:39] "[36mGET /static/img/settings-icon.png HTTP/1.1[0m" 304 -
+2025-11-17 19:37:39,009 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:39] "[36mGET /static/js/jquery-3.5.1.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:37:53,467 - app - ERROR - ²ÆÎñ·ÖÎö´íÎó: ²»Ö§³ÖµÄÎÄ¼þÀàÐÍ: application/zip
+2025-11-17 19:37:53,473 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:37:53] "[35m[1mPOST /analyze_financials HTTP/1.1[0m" 500 -
+2025-11-17 19:38:01,751 - app - ERROR - ²ÆÎñ·ÖÎö´íÎó: ²»Ö§³ÖµÄÎÄ¼þÀàÐÍ: application/zip
+2025-11-17 19:38:01,751 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:38:01] "[35m[1mPOST /analyze_financials HTTP/1.1[0m" 500 -
+2025-11-17 19:38:03,552 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:38:03] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+2025-11-17 19:38:03,552 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:38:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-11-17 19:38:03,753 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:38:03] "[36mGET /static/js/bootstrap.bundle.min.js.map HTTP/1.1[0m" 304 -
+2025-11-17 19:38:03,943 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:38:03] "[36mGET /static/css/bootstrap.min.css.map HTTP/1.1[0m" 304 -
+2025-11-17 19:40:30,454 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\file_utils.py', reloading
+2025-11-17 19:40:30,456 - werkzeug - INFO -  * Detected change in 'E:\\Project1\\project_folder\\model\\file_utils.py', reloading
+2025-11-17 19:40:31,984 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:41:20,815 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:41:20,815 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:41:20,832 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:41:29,702 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:41:29,728 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:43:23,552 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:43:23,552 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:43:23,568 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:43:32,389 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:43:32,406 - werkzeug - INFO -  * Debugger PIN: 566-481-610
+2025-11-17 19:43:45,718 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:45] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:43:45,720 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:45] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-17 19:43:45,970 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:45] "GET /login?next=http://localhost:5000/ HTTP/1.1" 200 -
+2025-11-17 19:43:46,284 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:46] "GET /login?next=http://localhost:5000/ HTTP/1.1" 200 -
+2025-11-17 19:43:50,771 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:50] "[36mGET /favicon.ico HTTP/1.1[0m" 304 -
+2025-11-17 19:43:59,206 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:43:59] "POST /login HTTP/1.1" 200 -
+2025-11-17 19:44:00,606 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:00] "GET / HTTP/1.1" 200 -
+2025-11-17 19:44:01,065 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:01] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-11-17 19:44:01,386 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:01] "[36mGET /static/js/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:44:01,434 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:01] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+2025-11-17 19:44:01,719 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:01] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-11-17 19:44:01,968 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:01] "[36mGET /static/img/logo.svg HTTP/1.1[0m" 304 -
+2025-11-17 19:44:02,085 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:02] "[36mGET /static/img/settings-icon.png HTTP/1.1[0m" 304 -
+2025-11-17 19:44:02,151 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:02] "GET /static/js/languages.js HTTP/1.1" 200 -
+2025-11-17 19:44:02,169 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:02] "[36mGET /static/js/jquery-3.5.1.min.js HTTP/1.1[0m" 304 -
+2025-11-17 19:44:14,596 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2025 19:44:14] "POST /analyze_financials HTTP/1.1" 200 -
+2025-11-17 19:47:01,459 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.205.139.238:5000
+2025-11-17 19:47:01,459 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-17 19:47:01,482 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-17 19:47:10,172 - werkzeug - WARNING -  * Debugger is active!
+2025-11-17 19:47:10,207 - werkzeug - INFO -  * Debugger PIN: 566-481-610

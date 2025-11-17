@@ -9,6 +9,7 @@ from model.task_manager import TaskManager
 from model.file_utils import UPLOAD_DIR, LOG_DIR
 from model.core_algorithm import CoreAlgorithm  # 使用新的核心算法
 from model.routes import register_routes
+from model.auth import auth_manager
 
 # 检测是否是Codespaces环境
 IS_CODESPACES = os.getenv('CODESPACES') == 'true'
@@ -26,6 +27,7 @@ else:
 
 # ------------------ 应用初始化 ------------------
 app = Flask(__name__, template_folder='templates', static_folder='static')
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # 初始化系统组件 - 使用环境变量或默认目录配置下载目录
 # DOWNLOAD_DIR 环境变量优先；否则默认使用项目根目录下的 Download 目录
@@ -40,9 +42,13 @@ task_manager = TaskManager(log_dir=LOG_DIR)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# ------------------ 注册路由 ------------------
+# 注册路由
 # 修复：参数顺序正确传递
 register_routes(app, core_algorithm, task_manager)  # 注意参数顺序：app, system, task_manager
+
+# 设置全局错误处理器
+from model.error_handler import setup_global_error_handlers
+setup_global_error_handlers(app)
 
 # ------------------ 启动清理线程 ------------------
 task_manager.start_cleanup_thread()

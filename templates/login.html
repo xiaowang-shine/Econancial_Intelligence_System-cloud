@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 智能经营分析系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            margin: 20px;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .login-left p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            z-index: 1;
+            position: relative;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            z-index: 1;
+            position: relative;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .feature-list i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 60px 40px;
+            background: #f8f9fa;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .form-floating {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            height: 50px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-login {
+            width: 100%;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-login:disabled {
+            background: #6c757d;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 8px;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .default-credentials {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .default-credentials strong {
+            color: #1976d2;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                margin: 10px;
+            }
+            
+            .login-left {
+                padding: 40px 20px;
+            }
+            
+            .login-left h1 {
+                font-size: 2rem;
+            }
+            
+            .login-right {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <h1>智能经营分析系统</h1>
+            <p>专业的企业财务健康度评估与预测平台</p>
+            <ul class="feature-list">
+                <li><i class="bi bi-graph-up"></i> 智能财务数据分析</li>
+                <li><i class="bi bi-shield-check"></i> 企业健康度评估</li>
+                <li><i class="bi bi-lightning"></i> 实时风险预警</li>
+                <li><i class="bi bi-cpu"></i> AI驱动预测模型</li>
+                <li><i class="bi bi-file-earmark-text"></i> 专业报告生成</li>
+            </ul>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-form">
+                <div class="login-header">
+                    <h2>欢迎登录</h2>
+                    <p>请输入您的账户信息</p>
+                </div>
+                
+                <div id="loginAlert" class="alert alert-danger" style="display: none;"></div>
+                
+                <form id="loginForm">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required>
+                        <label for="username"><i class="bi bi-person"></i> 用户名</label>
+                    </div>
+                    
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="密码" required>
+                        <label for="password"><i class="bi bi-lock"></i> 密码</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-login" id="loginBtn">
+                        <span id="loginText">登录</span>
+                        <span id="loginSpinner" class="spinner-border" style="display: none;"></span>
+                    </button>
+                </form>
+                
+                <div class="default-credentials">
+                    <strong>默认管理员账户：</strong><br>
+                    用户名：admin<br>
+                    密码：admin123
+                </div>
+                
+                <div class="login-footer">
+                    <p>&copy; 2024 智能经营分析系统. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const alertDiv = document.getElementById('loginAlert');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            
+            // 隐藏错误信息
+            alertDiv.style.display = 'none';
+            
+            // 显示加载状态
+            loginBtn.disabled = true;
+            loginText.textContent = '登录中...';
+            loginSpinner.style.display = 'inline-block';
+            
+            // 发送登录请求
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 登录成功
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.textContent = '登录成功，正在跳转...';
+                    alertDiv.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    // 显示错误信息
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.textContent = data.error || '登录失败，请重试';
+                    alertDiv.style.display = 'block';
+                    
+                    // 恢复按钮状态
+                    loginBtn.disabled = false;
+                    loginText.textContent = '登录';
+                    loginSpinner.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('登录错误:', error);
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.textContent = '网络错误，请检查连接后重试';
+                alertDiv.style.display = 'block';
+                
+                // 恢复按钮状态
+                loginBtn.disabled = false;
+                loginText.textContent = '登录';
+                loginSpinner.style.display = 'none';
+            });
+        });
+
+        // 输入框焦点效果
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // 回车键提交
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('loginBtn').disabled) {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>
